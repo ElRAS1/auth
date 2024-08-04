@@ -43,6 +43,6 @@ message DeleteRequest { int64 id = 1; }
 service UserApi {
   rpc Create(Request) returns (CreateResponse);
   rpc Get(Request) returns (GetResponse);
-  rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
-  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+  rpc Update(UpdateRequest) returns (google.protobuf.Empty);
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
 }

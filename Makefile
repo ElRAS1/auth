@@ -6,8 +6,6 @@ install-golangci-lint:
 lint:
 	GOBIN=$(LOCAL_BIN) golangci-lint run ./... --config .golangci.pipeline.yaml
 
-
-
 install-deps:
 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	GOBIN=$(LOCAL_BIN) go install -mod=mod google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -18,9 +16,9 @@ get-deps:
 
 
 generate:
-	make generate-note-api
+	make generate-user-api
 
-generate-note-api:
+generate-user-api:
 	mkdir -p pkg/userApi
 	protoc --proto_path api/userApi \
 	--go_out=pkg/userApi --go_opt=paths=source_relative \
