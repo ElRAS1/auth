@@ -1,9 +1,6 @@
 package config
 
 import (
-	"os"
-	"path/filepath"
-
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -13,19 +10,11 @@ type ConfigApp struct {
 	Configlog string `yaml:"configlogger"`
 }
 
-const cfgPath string = "../config/config.yaml"
+const cfgPath string = "app/config/config.yaml"
 
 func InitConfig() (*ConfigApp, error) {
 	var cfg ConfigApp
-	var err error
-
-	workDir, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
-	cfgPath := filepath.Join(workDir, cfgPath)
-	err = cleanenv.ReadConfig(cfgPath, &cfg)
+	err := cleanenv.ReadConfig(cfgPath, &cfg)
 	if err != nil {
 		return nil, err
 	}

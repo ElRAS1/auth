@@ -26,3 +26,7 @@ generate-user-api:
 	--go-grpc_out=pkg/userApi --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
 	api/userApi/userApi.proto
+
+# запускать в корне проекта (run in the root of the project)
+run:
+	go run app/cmd/main.go

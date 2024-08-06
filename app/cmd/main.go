@@ -19,7 +19,7 @@ func main() {
 	}
 	logger := logger.ConfigureLogger(cfg.Loglevel, cfg.Configlog)
 	logger.Debug("the logger has been initialized")
-	srv, lis, err := server.InitServer(cfg.Port)
+	srv, lis, err := server.InitServer(cfg.Port, &logger)
 	go func() {
 		if err = srv.Serve(lis); err != nil {
 			log.Fatalln(err)
