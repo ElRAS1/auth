@@ -1,3 +1,4 @@
+include .env
 LOCAL_BIN:=$(CURDIR)/bin
 
 install-golangci-lint:
@@ -26,6 +27,12 @@ generate-user-api:
 	--go-grpc_out=pkg/userApi --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
 	api/userApi/userApi.proto
+
+migrate-down:
+	migrate -path=migrations -database=postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable down
+
+migrate-up:
+	migrate -path=migrations -database=postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable up
 
 # запускать в корне проекта (run in the root of the project)
 run:

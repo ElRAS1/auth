@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -12,11 +14,13 @@ type ConfigApp struct {
 
 const cfgPath string = "app/config/config.yaml"
 
-func InitConfig() (*ConfigApp, error) {
+// ReadingConfig reading the config
+func ReadingConfig() (*ConfigApp, error) {
+	const nm = "[ReadingConfig]"
 	var cfg ConfigApp
 	err := cleanenv.ReadConfig(cfgPath, &cfg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s %v", nm, err)
 	}
 	return &cfg, nil
 }
