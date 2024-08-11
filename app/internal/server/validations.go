@@ -10,7 +10,7 @@ import (
 
 // TODO: исправить на более надежный вариант
 // реализован самый простой вариант
-func (a *AppServer) validations(req *userApi.Request) error {
+func (a *AppServer) validations(req *userApi.CreateRequest) error {
 	const nm = "[validations]"
 	if req.Password == "" || req.PasswordConfirm == "" {
 		return fmt.Errorf("%s password cannot be empty", nm)

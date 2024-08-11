@@ -30,8 +30,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserApiClient interface {
-	Create(ctx context.Context, in *Request, opts ...grpc.CallOption) (*CreateResponse, error)
-	Get(ctx context.Context, in *Request, opts ...grpc.CallOption) (*GetResponse, error)
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
@@ -44,7 +44,7 @@ func NewUserApiClient(cc grpc.ClientConnInterface) UserApiClient {
 	return &userApiClient{cc}
 }
 
-func (c *userApiClient) Create(ctx context.Context, in *Request, opts ...grpc.CallOption) (*CreateResponse, error) {
+func (c *userApiClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, UserApi_Create_FullMethodName, in, out, cOpts...)
@@ -54,7 +54,7 @@ func (c *userApiClient) Create(ctx context.Context, in *Request, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *userApiClient) Get(ctx context.Context, in *Request, opts ...grpc.CallOption) (*GetResponse, error) {
+func (c *userApiClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetResponse)
 	err := c.cc.Invoke(ctx, UserApi_Get_FullMethodName, in, out, cOpts...)
@@ -88,8 +88,8 @@ func (c *userApiClient) Delete(ctx context.Context, in *DeleteRequest, opts ...g
 // All implementations must embed UnimplementedUserApiServer
 // for forward compatibility.
 type UserApiServer interface {
-	Create(context.Context, *Request) (*CreateResponse, error)
-	Get(context.Context, *Request) (*GetResponse, error)
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
 	Update(context.Context, *UpdateRequest) (*empty.Empty, error)
 	Delete(context.Context, *DeleteRequest) (*empty.Empty, error)
 	mustEmbedUnimplementedUserApiServer()
@@ -102,10 +102,10 @@ type UserApiServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserApiServer struct{}
 
-func (UnimplementedUserApiServer) Create(context.Context, *Request) (*CreateResponse, error) {
+func (UnimplementedUserApiServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedUserApiServer) Get(context.Context, *Request) (*GetResponse, error) {
+func (UnimplementedUserApiServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedUserApiServer) Update(context.Context, *UpdateRequest) (*empty.Empty, error) {
@@ -136,7 +136,7 @@ func RegisterUserApiServer(s grpc.ServiceRegistrar, srv UserApiServer) {
 }
 
 func _UserApi_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -148,13 +148,13 @@ func _UserApi_Create_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: UserApi_Create_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).Create(ctx, req.(*Request))
+		return srv.(UserApiServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _UserApi_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -166,7 +166,7 @@ func _UserApi_Get_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: UserApi_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).Get(ctx, req.(*Request))
+		return srv.(UserApiServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
