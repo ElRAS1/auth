@@ -15,6 +15,5 @@ func ConfigureLogger(level int, cfg string) (logger *slog.Logger) {
 	default:
 		logger = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.Level(level)}))
 	}
-
 	return logger
 }

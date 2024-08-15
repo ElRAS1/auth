@@ -18,7 +18,7 @@ func (a AppServer) Get(ctx context.Context, req *userApi.GetRequest) (*userApi.G
 }
 
 func (a AppServer) Create(ctx context.Context, req *userApi.CreateRequest) (*userApi.CreateResponse, error) {
-	err := a.validations(req)
+	err := req.Validate()
 	if err != nil {
 		a.logger.Info(err.Error())
 		return nil, err
@@ -32,6 +32,11 @@ func (a AppServer) Create(ctx context.Context, req *userApi.CreateRequest) (*use
 }
 
 func (a AppServer) Update(ctx context.Context, req *userApi.UpdateRequest) (*emptypb.Empty, error) {
+	err := req.Validate()
+	if err != nil {
+		a.logger.Info(err.Error())
+		return nil, err
+	}
 	return nil, nil
 }
 
