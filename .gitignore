@@ -23,6 +23,7 @@ go.work.sum
 
 
 bin/
-
+.vscode/
 .env
+.idea
 

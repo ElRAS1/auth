@@ -13,13 +13,15 @@ import (
 )
 
 func main() {
-	cfg, err := config.InitConfig()
+	cfg, err := config.ReadingConfig()
 	if err != nil {
 		log.Fatalln(err)
 	}
 	logger := logger.ConfigureLogger(cfg.Loglevel, cfg.Configlog)
-	logger.Debug("the logger has been initialized")
-	srv, lis, err := server.InitServer(cfg.Port)
+	srv, lis, err := server.StartServer(logger, cfg.Port)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	go func() {
 		if err = srv.Serve(lis); err != nil {
 			log.Fatalln(err)

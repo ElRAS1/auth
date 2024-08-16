@@ -1,8 +1,7 @@
 package config
 
 import (
-	"os"
-	"path/filepath"
+	"fmt"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -13,21 +12,15 @@ type ConfigApp struct {
 	Configlog string `yaml:"configlogger"`
 }
 
-const cfgPath string = "../config/config.yaml"
+const cfgPath string = "app/config/config.yaml"
 
-func InitConfig() (*ConfigApp, error) {
+// ReadingConfig reading the config
+func ReadingConfig() (*ConfigApp, error) {
+	const nm = "[ReadingConfig]"
 	var cfg ConfigApp
-	var err error
-
-	workDir, err := os.Getwd()
+	err := cleanenv.ReadConfig(cfgPath, &cfg)
 	if err != nil {
-		return nil, err
-	}
-
-	cfgPath := filepath.Join(workDir, cfgPath)
-	err = cleanenv.ReadConfig(cfgPath, &cfg)
-	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s %v", nm, err)
 	}
 	return &cfg, nil
 }

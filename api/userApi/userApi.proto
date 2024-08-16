@@ -6,43 +6,54 @@ option go_package = "github.com/ELRAS1/auth/api/userApi;userApi";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
+import "validate.proto";
 
-message Request {
-  string name = 1;
-  string email = 2;
-  string password = 3;
+enum role {
+  user = 0;
+  admin = 1;
+}
+message CreateRequest {
+  string name = 1 [ (validate.rules).string = {
+    min_len : 1,
+    pattern : "^[A-Za-z]+( [A-Za-z]+)*$",
+    max_bytes : 256,
+  } ];
+  string email = 2 [ (validate.rules).string.email = true ];
+  string password = 3 [ (validate.rules).string = {
+    min_len : 8,  // Минимальная длина пароля
+    max_len : 32, // Максимальная длина пароля
+  } ];
   string password_confirm = 4;
-  enum role {
-    user = 0;
-    admin = 1;
-  }
+  role role = 5 [ (validate.rules).enum = {in : [ 0, 1 ]} ];
 }
 
 message CreateResponse { int64 id = 1; }
+message GetRequest { int64 id = 1; }
 
 message GetResponse {
   int64 id = 1;
   string name = 2;
   string email = 3;
-  enum role {
-    user = 0;
-    admin = 1;
-  }
-  google.protobuf.Timestamp created_at = 4;
-  google.protobuf.Timestamp updated_at = 5;
+  role role = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 message UpdateRequest {
   int64 id = 1;
-  google.protobuf.StringValue name = 2;
-  google.protobuf.StringValue email = 3;
+  google.protobuf.StringValue name = 2 [ (validate.rules).string = {
+    pattern : "^[A-Za-z]+( [A-Za-z]+)*$",
+    max_bytes : 256,
+  } ];
+  google.protobuf.StringValue email = 3
+      [ (validate.rules).string.email = true ];
 }
 
 message DeleteRequest { int64 id = 1; }
 
 service UserApi {
-  rpc Create(Request) returns (CreateResponse);
-  rpc Get(Request) returns (GetResponse);
+  rpc Create(CreateRequest) returns (CreateResponse);
+  rpc Get(GetRequest) returns (GetResponse);
   rpc Update(UpdateRequest) returns (google.protobuf.Empty);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
 }
