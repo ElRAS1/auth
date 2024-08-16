@@ -18,13 +18,13 @@ message CreateRequest {
     pattern : "^[A-Za-z]+( [A-Za-z]+)*$",
     max_bytes : 256,
   } ];
-  string email = 3 [ (validate.rules).string.email = true ];
-  string password = 4 [ (validate.rules).string = {
+  string email = 2 [ (validate.rules).string.email = true ];
+  string password = 3 [ (validate.rules).string = {
     min_len : 8,  // Минимальная длина пароля
     max_len : 32, // Максимальная длина пароля
   } ];
-  string password_confirm = 5;
-  role role = 6 [ (validate.rules).enum = {in : [ 0, 1 ]} ];
+  string password_confirm = 4;
+  role role = 5 [ (validate.rules).enum = {in : [ 0, 1 ]} ];
 }
 
 message CreateResponse { int64 id = 1; }

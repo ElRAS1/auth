@@ -11,7 +11,7 @@ import (
 
 func (s *Storage) SaveUser(req *userApi.CreateRequest) (int64, error) {
 	const nm = "[SaveUser]"
-	query, sql, err := sq.Insert("users").
+	query, args, err := sq.Insert("users").
 		Columns("name", "email", "password", "role", "created_at", "updated_at").
 		Values(req.Name, req.Email, req.Password, req.Role, time.Now(), time.Now()).
 		Suffix("RETURNING id").PlaceholderFormat(sq.Dollar).ToSql()
@@ -20,7 +20,7 @@ func (s *Storage) SaveUser(req *userApi.CreateRequest) (int64, error) {
 		return 0, fmt.Errorf("%s %v", nm, err)
 	}
 	var id int64
-	err = s.Db.QueryRow(query, sql...).Scan(&id)
+	err = s.Db.QueryRow(query, args...).Scan(&id)
 	if err != nil {
 		return 0, fmt.Errorf("%s %v", nm, err)
 	}
@@ -70,4 +70,39 @@ func (s *Storage) GetUsers(req *userApi.GetRequest) (*userApi.GetResponse, error
 		return nil, fmt.Errorf("%s no rows found", nm)
 	}
 	return &resp, nil
+}
+
+func (s *Storage) UpdateUser(req *userApi.UpdateRequest) error {
+	const nm = "[UpdateUser]"
+	query, args, err := sq.Select("id").From("users").Where(sq.Eq{"id": req.Id}).PlaceholderFormat(sq.Dollar).ToSql()
+	if err != nil {
+		return fmt.Errorf("%s %v", nm, err)
+	}
+	row, err := s.Db.Query(query, args...)
+	if err != nil {
+		return fmt.Errorf("%s %v", nm, err)
+	}
+	for row.Next() {}
+	err = row.Err()
+	if err != nil {
+		return fmt.Errorf("%s %v", nm, err)
+	}
+	sql := sq.Update("users").PlaceholderFormat(sq.Dollar)
+	if req.Name.String() != "" {
+		sql.Set("name", req.Name.GetValue())
+	}
+	if req.Email.String() != "" {
+		sql.Set("email", req.Email.GetValue())
+	}
+	sql.Set("updated_at", time.Now())
+	query, args, err = sql.ToSql()
+
+	if err != nil {
+		return fmt.Errorf("%s %v", nm, err)
+	}
+	_, err = s.Db.Exec(query, args...)
+	if err != nil {
+		return fmt.Errorf("%s %v", nm, err)
+	}
+	return nil
 }
