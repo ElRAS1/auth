@@ -11,15 +11,14 @@ import (
 
 func (a *AppServer) CreateValidations(req *userApi.CreateRequest) error {
 	const nm = "[CreateValidations]"
-	if err := req.Validate(); err != nil {
-		return fmt.Errorf("%s %v", nm, err.Error())
-	}
-
 	if ok := strings.Compare(req.Password, req.PasswordConfirm); ok != 0 {
 		return fmt.Errorf("%s passwords don't match", nm)
 	}
+	if err := req.Validate(); err != nil {
+		return fmt.Errorf("%s %v", nm, err.Error())
+	}
 	if err := CheckPasswordLever(req.Password); err != nil {
-		return fmt.Errorf("the password must contain at least one capital letter, a number and at least 8 characters")
+		return fmt.Errorf("%s %v", nm, err)
 	}
 	return nil
 }
@@ -32,9 +31,12 @@ func (a *AppServer) UpdateValidation(req *userApi.UpdateRequest) error {
 			return fmt.Errorf("%s %v", nm, err.Error())
 		}
 		return nil
+	} else if email == "" && name == "" {
+		return fmt.Errorf("%s at least one field must be filled in", nm)
+
 	}
 	if email != "" {
-		if _, err := mail.ParseAddress(req.Email.String()); err != nil {
+		if _, err := mail.ParseAddress(req.Email.Value); err != nil {
 			return fmt.Errorf("%s %v", nm, err.Error())
 		}
 	}
@@ -54,21 +56,21 @@ func CheckPasswordLever(ps string) error {
 	if len(ps) <= 8 {
 		return fmt.Errorf("password len is < 8")
 	}
-	num := `[0-9]*`
-	a_z := `[a-z]*`
-	A_Z := `[A-Z]*`
-	symbol := `[!@#~$%^&*()+|_]*`
+	num := `[0-9]+`
+	a_z := `[a-z]+`
+	A_Z := `[A-Z]+`
+	symbol := `[!@#~$%^&*()+|_]+`
 	if b, err := regexp.MatchString(num, ps); !b || err != nil {
-		return fmt.Errorf("password need num :%v", err)
+		return fmt.Errorf("there are no numbers")
 	}
 	if b, err := regexp.MatchString(a_z, ps); !b || err != nil {
-		return fmt.Errorf("password need a_z :%v", err)
+		return fmt.Errorf("there are no lowercase letters")
 	}
 	if b, err := regexp.MatchString(A_Z, ps); !b || err != nil {
-		return fmt.Errorf("password need A_Z :%v", err)
+		return fmt.Errorf("there are no capital letters")
 	}
 	if b, err := regexp.MatchString(symbol, ps); !b || err != nil {
-		return fmt.Errorf("password need symbol :%v", err)
+		return fmt.Errorf("password need symbol !@#~$%%^&*()+|_")
 	}
 	return nil
 }

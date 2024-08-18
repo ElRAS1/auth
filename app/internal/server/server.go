@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net"
@@ -30,11 +31,11 @@ func newApp(logger slog.Logger) *AppServer {
 	}
 }
 
-func StartServer(logger *slog.Logger, port string) (*grpc.Server, net.Listener, error) {
+func StartServer(ctx context.Context, logger *slog.Logger, port string) (*grpc.Server, net.Listener, error) {
 	const nm = "[StartServer]"
 	var err error
 	app := newApp(*logger)
-	app.db, err = storage.ConfigureStorage()
+	app.db, err = storage.ConfigureStorage(ctx)
 	if err != nil {
 		logger.Error(err.Error())
 		return nil, nil, fmt.Errorf("%s %v", nm, err)
