@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -17,8 +18,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	ctx, cancel := context.WithCancel(context.Background())
 	logger := logger.ConfigureLogger(cfg.Loglevel, cfg.Configlog)
-	srv, lis, err := server.StartServer(logger, cfg.Port)
+	srv, lis, err := server.StartServer(ctx, logger, cfg.Port)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -31,4 +33,5 @@ func main() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	<-sig
+	cancel()
 }

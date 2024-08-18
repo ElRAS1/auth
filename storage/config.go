@@ -1,9 +1,11 @@
 package storage
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -13,8 +15,10 @@ type Storage struct {
 	Db *sql.DB
 }
 
-func ConfigureStorage() (*Storage, error) {
+func ConfigureStorage(ctx context.Context) (*Storage, error) {
 	const nm = "[ConfigureStorage]"
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
 	err := load()
 	if err != nil {
 		return nil, fmt.Errorf("%s %v", nm, err)
@@ -30,7 +34,7 @@ func ConfigureStorage() (*Storage, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s %v", nm, err)
 	}
-	if err = db.Ping(); err != nil {
+	if err = db.PingContext(ctx); err != nil {
 		return nil, fmt.Errorf("%s %v", nm, err)
 	}
 	return &Storage{Db: db}, nil
