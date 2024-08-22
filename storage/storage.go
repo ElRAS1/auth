@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ELRAS1/auth/app/utils"
 	"github.com/ELRAS1/auth/pkg/userApi"
 	sq "github.com/Masterminds/squirrel"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -12,9 +13,13 @@ import (
 
 func (s *Storage) SaveUser(ctx context.Context, req *userApi.CreateRequest) (int64, error) {
 	const nm = "[SaveUser]"
+	hashedPassw, err := utils.EncryptedPassw(req.Password)
+	if err != nil {
+		return 0, fmt.Errorf("%s %v", nm, err)
+	}
 	query, args, err := sq.Insert("users").
 		Columns("name", "email", "password", "role", "created_at", "updated_at").
-		Values(req.Name, req.Email, req.Password, req.Role, time.Now(), time.Now()).
+		Values(req.Name, req.Email, hashedPassw, req.Role, time.Now(), time.Now()).
 		Suffix("RETURNING id").PlaceholderFormat(sq.Dollar).ToSql()
 
 	if err != nil {
