@@ -11,6 +11,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+//SaveUser in db
 func (s *Storage) SaveUser(ctx context.Context, req *userApi.CreateRequest) (int64, error) {
 	const nm = "[SaveUser]"
 
@@ -40,6 +41,7 @@ func (s *Storage) SaveUser(ctx context.Context, req *userApi.CreateRequest) (int
 	return id, nil
 }
 
+//DeleteUser in db
 func (s *Storage) DeleteUser(ctx context.Context, req *userApi.DeleteRequest) error {
 	const nm = "[DeleteUser]"
 
@@ -63,6 +65,7 @@ func (s *Storage) DeleteUser(ctx context.Context, req *userApi.DeleteRequest) er
 	return nil
 }
 
+//GetUsers: return all users in db
 func (s *Storage) GetUsers(ctx context.Context, req *userApi.GetRequest) (*userApi.GetResponse, error) {
 	const nm = "[GetUsers]"
 
@@ -101,6 +104,7 @@ func (s *Storage) GetUsers(ctx context.Context, req *userApi.GetRequest) (*userA
 	return &resp, nil
 }
 
+//UpdateUser: update data
 func (s *Storage) UpdateUser(ctx context.Context, req *userApi.UpdateRequest) error {
 	const nm = "[UpdateUser]"
 

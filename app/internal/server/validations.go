@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	num    = `[0-9]+`
-	a_z    = `[a-z]+`
-	A_Z    = `[A-Z]+`
-	symbol = `[!@#~$%^&*()+|_]+`
+	numbers = `[0-9]+`
+	letters = `[a-z]+`
+	uppers  = `[A-Z]+`
+	symbol  = `[!@#~$%^&*()+|_]+`
 )
 
 func (a *AppServer) CreateValidations(req *userApi.CreateRequest) error {
@@ -75,15 +75,15 @@ func CheckPasswordLever(ps string) error {
 		return fmt.Errorf("password len is < 8")
 	}
 
-	if b, err := regexp.MatchString(num, ps); !b || err != nil {
+	if b, err := regexp.MatchString(numbers, ps); !b || err != nil {
 		return fmt.Errorf("there are no numbers")
 	}
 
-	if b, err := regexp.MatchString(a_z, ps); !b || err != nil {
+	if b, err := regexp.MatchString(letters, ps); !b || err != nil {
 		return fmt.Errorf("there are no lowercase letters")
 	}
 
-	if b, err := regexp.MatchString(A_Z, ps); !b || err != nil {
+	if b, err := regexp.MatchString(uppers, ps); !b || err != nil {
 		return fmt.Errorf("there are no capital letters")
 	}
 

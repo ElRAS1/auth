@@ -14,7 +14,7 @@ import (
 type Storage struct {
 	Db *sql.DB
 }
-
+//ConfigureStorage: configurations and database connection
 func ConfigureStorage(ctx context.Context) (*Storage, error) {
 	const nm = "[ConfigureStorage]"
 

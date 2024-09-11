@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+//EncryptedPassw: hashing password: use bcrypt
 func EncryptedPassw(passw string) (string, error) {
 	const nm string = "[EncryptedPassw]"
 
