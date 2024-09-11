@@ -18,9 +18,11 @@ const cfgPath string = "app/config/config.yaml"
 func ReadingConfig() (*ConfigApp, error) {
 	const nm = "[ReadingConfig]"
 	var cfg ConfigApp
+
 	err := cleanenv.ReadConfig(cfgPath, &cfg)
 	if err != nil {
 		return nil, fmt.Errorf("%s %v", nm, err)
 	}
+
 	return &cfg, nil
 }
