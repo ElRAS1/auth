@@ -1,18 +1,25 @@
-package storage
+package auth
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/ELRAS1/auth/app/utils"
-	"github.com/ELRAS1/auth/pkg/userApi"
+	"github.com/ELRAS1/auth/internal/model"
+	"github.com/ELRAS1/auth/internal/repository"
+	modulRepo "github.com/ELRAS1/auth/internal/repository/auth/model"
+	"github.com/ELRAS1/auth/internal/utils"
 	sq "github.com/Masterminds/squirrel"
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-//SaveUser in db
-func (s *Storage) SaveUser(ctx context.Context, req *userApi.CreateRequest) (int64, error) {
+type repo struct {
+	repository.AuthRepository
+	db *pgxpool.Pool
+}
+
+// SaveUser in db
+func (r *repo) SaveUser(ctx context.Context, req *model.CreateRequest) (int64, error) {
 	const nm = "[SaveUser]"
 
 	hashedPassw, err := utils.EncryptedPassw(req.Password)
@@ -23,7 +30,9 @@ func (s *Storage) SaveUser(ctx context.Context, req *userApi.CreateRequest) (int
 	query, args, err := sq.Insert("users").
 		Columns("name", "email", "password", "role", "created_at", "updated_at").
 		Values(req.Name, req.Email, hashedPassw, req.Role, time.Now(), time.Now()).
-		Suffix("RETURNING id").PlaceholderFormat(sq.Dollar).ToSql()
+		Suffix("RETURNING id").
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
 
 	if err != nil {
 		return 0, fmt.Errorf("%s %v", nm, err)
@@ -41,8 +50,8 @@ func (s *Storage) SaveUser(ctx context.Context, req *userApi.CreateRequest) (int
 	return id, nil
 }
 
-//DeleteUser in db
-func (s *Storage) DeleteUser(ctx context.Context, req *userApi.DeleteRequest) error {
+// DeleteUser in db
+func (r *repo) DeleteUser(ctx context.Context, req *model.DeleteRequest) error {
 	const nm = "[DeleteUser]"
 
 	query, args, err := sq.Delete("users").
@@ -65,8 +74,8 @@ func (s *Storage) DeleteUser(ctx context.Context, req *userApi.DeleteRequest) er
 	return nil
 }
 
-//GetUsers: return all users in db
-func (s *Storage) GetUsers(ctx context.Context, req *userApi.GetRequest) (*userApi.GetResponse, error) {
+// GetUsers: return all users in db
+func (r *repo) GetUsers(ctx context.Context, req *model.GetRequest) (*model.GetResponse, error) {
 	const nm = "[GetUsers]"
 
 	query, args, err := sq.Select("id", "name", "email", "role", "created_at", "updated_at").From("users").
@@ -81,7 +90,7 @@ func (s *Storage) GetUsers(ctx context.Context, req *userApi.GetRequest) (*userA
 	parentCtx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	resp := userApi.GetResponse{}
+	resp := model.GetResponse{}
 	rows, err := s.Db.QueryContext(parentCtx, query, args...)
 
 	if err != nil {
@@ -104,8 +113,8 @@ func (s *Storage) GetUsers(ctx context.Context, req *userApi.GetRequest) (*userA
 	return &resp, nil
 }
 
-//UpdateUser: update data
-func (s *Storage) UpdateUser(ctx context.Context, req *userApi.UpdateRequest) error {
+// UpdateUser: update data
+func (r *repo) UpdateUser(ctx context.Context, req *model.UpdateRequest) error {
 	const nm = "[UpdateUser]"
 
 	query, args, err := sq.Select("id").From("users").Where(sq.Eq{"id": req.Id}).PlaceholderFormat(sq.Dollar).ToSql()
@@ -123,12 +132,12 @@ func (s *Storage) UpdateUser(ctx context.Context, req *userApi.UpdateRequest) er
 	}
 
 	sql := sq.Update("users").Set("updated_at", time.Now()).Where(sq.Eq{"id": req.Id}).PlaceholderFormat(sq.Dollar)
-	if req.Name.Value != "" {
-		sql = sql.Set("name", req.Name.Value)
+	if req.Name != "" {
+		sql = sql.Set("name", req.Name)
 	}
 
-	if req.Email.Value != "" {
-		sql = sql.Set("email", req.Email.Value)
+	if req.Email != "" {
+		sql = sql.Set("email", req.Email)
 	}
 
 	query, args, err = sql.ToSql()

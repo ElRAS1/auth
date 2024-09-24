@@ -37,4 +37,4 @@ migrate-up:
 
 # запускать в корне проекта (run in the root of the project)
 run:
-	go run app/cmd/main.go
+	go run cmd/main.go

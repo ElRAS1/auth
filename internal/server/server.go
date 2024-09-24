@@ -7,7 +7,7 @@ import (
 	"net"
 
 	userApi "github.com/ELRAS1/auth/pkg/userApi"
-	"github.com/ELRAS1/auth/app/internal/storage"
+	"github.com/ELRAS1/auth/internal/storage"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

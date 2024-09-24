@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ELRAS1/auth/app/internal/config"
-	"github.com/ELRAS1/auth/app/internal/server"
+	"github.com/ELRAS1/auth/internal/config"
+	"github.com/ELRAS1/auth/internal/server"
 	"github.com/ELRAS1/auth/pkg/logger"
 )
 
@@ -20,6 +20,7 @@ func main() {
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	logger := logger.ConfigureLogger(cfg.Loglevel, cfg.Configlog)
 
@@ -38,5 +39,5 @@ func main() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	<-sig
-	cancel()
+
 }
