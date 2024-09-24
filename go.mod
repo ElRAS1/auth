@@ -4,7 +4,6 @@ go 1.22.2
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/envoyproxy/protoc-gen-validate v1.1.0
 	github.com/golang/protobuf v1.5.4
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/joho/godotenv v1.5.1

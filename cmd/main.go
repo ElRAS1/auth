@@ -8,9 +8,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ELRAS1/auth/app/config"
-	"github.com/ELRAS1/auth/app/internal/logger"
+	"github.com/ELRAS1/auth/app/internal/config"
 	"github.com/ELRAS1/auth/app/internal/server"
+	"github.com/ELRAS1/auth/pkg/logger"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 			log.Fatalln(err)
 		}
 	}()
-	
+
 	logger.Info(fmt.Sprintf("the server is running on the port %v", cfg.Port))
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)

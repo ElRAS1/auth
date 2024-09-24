@@ -20,11 +20,6 @@ func (a AppServer) Get(ctx context.Context, req *userApi.GetRequest) (*userApi.G
 }
 
 func (a AppServer) Create(ctx context.Context, req *userApi.CreateRequest) (*userApi.CreateResponse, error) {
-	err := a.CreateValidations(req)
-	if err != nil {
-		a.logger.Info(err.Error())
-		return nil, err
-	}
 
 	id, err := a.db.SaveUser(ctx, req)
 	if err != nil {
@@ -36,13 +31,8 @@ func (a AppServer) Create(ctx context.Context, req *userApi.CreateRequest) (*use
 }
 
 func (a AppServer) Update(ctx context.Context, req *userApi.UpdateRequest) (*emptypb.Empty, error) {
-	err := a.UpdateValidation(req)
-	if err != nil {
-		a.logger.Info(err.Error())
-		return nil, err
-	}
 
-	err = a.db.UpdateUser(ctx, req)
+	err := a.db.UpdateUser(ctx, req)
 	if err != nil {
 		a.logger.Info(err.Error())
 		return nil, err
