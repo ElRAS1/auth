@@ -1,4 +1,4 @@
-package repository
+package service
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/ELRAS1/auth/internal/model"
 )
 
-type AuthRepository interface {
+type AuthService interface {
 	Create(ctx context.Context, req *model.CreateRequest) (*model.CreateResponse, error)
 	Update(ctx context.Context, req *model.UpdateRequest) error
 	Delete(ctx context.Context, req *model.DeleteRequest) error

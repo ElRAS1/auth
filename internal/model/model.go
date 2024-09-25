@@ -15,6 +15,10 @@ type GetRequest struct {
 	Id int64
 }
 
+type CreateResponse struct {
+	Id int64
+}
+
 type UpdateRequest struct {
 	Id    int64
 	Name  string

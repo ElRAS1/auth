@@ -1,9 +1,11 @@
-addr : ":50051"
-level : 0
+addr: ":50051"
+network: "tcp"
+
+level: 0
 # LevelDebug Level = -4
 # LevelInfo  Level = 0
 # LevelWarn  Level = 4
 # LevelError Level = 8
-configlogger : "dev" 
-# "prod" print log in json format 
+configlogger: "prod"
+# "prod" print log in json format
 # "dev" print log in text format

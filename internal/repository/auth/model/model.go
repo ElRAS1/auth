@@ -15,6 +15,10 @@ type GetRequest struct {
 	Id int64 `db:"id"`
 }
 
+type CreateResponse struct {
+	Id int64 `db:"id"`
+}
+
 type UpdateRequest struct {
 	Id    int64  `db:"id"`
 	Name  string `db:"name"`
@@ -22,11 +26,10 @@ type UpdateRequest struct {
 }
 
 type CreateRequest struct {
-	Name            string `db:"name"`
-	Email           string `db:"email"`
-	Password        string `db:"password"`
-	PasswordConfirm string `db:"-"`
-	Role            Role   `db:"role"`
+	Name     string `db:"name"`
+	Email    string `db:"email"`
+	Password string `db:"password"`
+	Role     Role   `db:"role"`
 }
 
 type GetResponse struct {
