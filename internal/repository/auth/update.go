@@ -19,8 +19,7 @@ func (r *repo) Update(ctx context.Context, req *model.UpdateRequest) error {
 	sql := sq.Update(dbName).
 		Set(updatedAt, time.Now()).
 		Where(sq.Eq{id: req.Id}).
-		PlaceholderFormat(sq.Dollar).
-		Limit(1)
+		PlaceholderFormat(sq.Dollar)
 
 	if req.Name != "" {
 		sql = sql.Set(name, req.Name)

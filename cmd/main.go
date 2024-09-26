@@ -29,7 +29,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	logger := logger.ConfigureLogger(cfg.LogLevel, cfg.ConfigLog)
+	logger := logger.New(cfg.LogLevel, cfg.ConfigLog)
 
 	listener, err := net.Listen(cfg.Network, cfg.Port)
 	if err != nil {
