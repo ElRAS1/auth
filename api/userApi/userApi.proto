@@ -6,25 +6,17 @@ option go_package = "github.com/ELRAS1/auth/api/userApi;userApi";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
-import "validate.proto";
 
 enum role {
   user = 0;
   admin = 1;
 }
 message CreateRequest {
-  string name = 1 [ (validate.rules).string = {
-    min_len : 1,
-    pattern : "^[A-Za-z]+( [A-Za-z]+)*$",
-    max_bytes : 256,
-  } ];
-  string email = 2 [ (validate.rules).string.email = true ];
-  string password = 3 [ (validate.rules).string = {
-    min_len : 8,  // Минимальная длина пароля
-    max_len : 32, // Максимальная длина пароля
-  } ];
+  string name = 1;
+  string email = 2;
+  string password = 3;
   string password_confirm = 4;
-  role role = 5 [ (validate.rules).enum = {in : [ 0, 1 ]} ];
+  role role = 5;
 }
 
 message CreateResponse { int64 id = 1; }
@@ -41,12 +33,8 @@ message GetResponse {
 
 message UpdateRequest {
   int64 id = 1;
-  google.protobuf.StringValue name = 2 [ (validate.rules).string = {
-    pattern : "^[A-Za-z]+( [A-Za-z]+)*$",
-    max_bytes : 256,
-  } ];
-  google.protobuf.StringValue email = 3
-      [ (validate.rules).string.email = true ];
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue email = 3;
 }
 
 message DeleteRequest { int64 id = 1; }

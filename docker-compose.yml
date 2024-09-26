@@ -1,6 +1,6 @@
 services:
   db:
-    container_name: pg
+    container_name: pg_auth
     image: postgres:16.3-alpine3.20
     env_file:
       - .env
@@ -32,7 +32,7 @@ services:
     container_name: migrate
     image: migrate/migrate
     volumes:
-      - ./migrations:/migrations
+      - ./internal/migrations:/migrations
     depends_on:
       - db
     env_file:
