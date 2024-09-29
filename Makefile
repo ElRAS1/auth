@@ -36,5 +36,11 @@ migrate-up:
 	migrate -path=migrations -database=postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable up
 
 # запускать в корне проекта (run in the root of the project)
-run:
+run: format
 	go run cmd/main.go
+
+format:
+	@go fmt ./...
+
+
+PHONY: run migrate-up migrate-down generate-user-api generate get-deps install-deps lint install-golangci-lint format
