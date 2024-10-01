@@ -10,14 +10,18 @@ import (
 )
 
 const (
-	errLengthName      = "name length exceeds maximum allowed limit of 50 characters"
+	errMaxLengthName   = "name length exceeds maximum allowed limit of 50 characters"
+	errMinLengthName   = "name length is less than 1"
 	errContainsDigits  = "name cannot contain any digits"
 	errContainsSpecial = "name cannot contain any special characters"
 	errEmptyFields     = "at least one field must be filled"
 	errNotMatch        = "passwords don't match"
 )
 
-const maxNameLength = 50
+const (
+	maxNameLength = 50
+	minNameLength = 1
+)
 
 func CheckCreate(req *model.CreateRequest) error {
 	if err := CheckName(req.Name); err != nil {
@@ -71,17 +75,18 @@ func CheckEmail(email string) error {
 }
 
 func CheckName(name string) error {
-	// Проверка длины имени
 	if len(name) > maxNameLength {
-		return fmt.Errorf("%s", errLengthName)
+		return fmt.Errorf("%s", errMaxLengthName)
 	}
 
-	// Проверка на наличие цифр
+	if len(name) < minNameLength {
+		return fmt.Errorf("%s", errMinLengthName)
+	}
+
 	if regexp.MustCompile(`\d`).MatchString(name) {
 		return fmt.Errorf("%s", errContainsDigits)
 	}
 
-	// Проверка на наличие специальных символов
 	if regexp.MustCompile(`[^a-zA-Z\s]`).MatchString(name) {
 		return fmt.Errorf("%s", errContainsSpecial)
 	}
