@@ -22,11 +22,11 @@ const (
 
 func CheckPassword(password string) error {
 	if len(password) < minPasswordLength {
-		return fmt.Errorf("%s", errPasswordTooShort)
+		return fmt.Errorf("password error: %s", errPasswordTooShort)
 	}
 
 	if len(password) > maxPasswordLength {
-		return fmt.Errorf("%s", errPasswordTooLong)
+		return fmt.Errorf("password error: %s", errPasswordTooLong)
 	}
 
 	var (

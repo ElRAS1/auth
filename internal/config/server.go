@@ -15,9 +15,9 @@ type Server struct {
 
 const cfgPath string = "config.yaml"
 
-// ReadingConfig reading the config
+// NewServerCfg reading the config
 func NewServerCfg() (*Server, error) {
-	const nm = "[ReadingConfig]"
+	const nm = "[NewServerCfg]"
 
 	cfg := &Server{}
 
