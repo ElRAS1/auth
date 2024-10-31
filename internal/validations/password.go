@@ -51,7 +51,6 @@ func CheckPassword(password string) error {
 			hasNumber = true
 		case unicode.IsSymbol(sym) || unicode.IsPunct(sym):
 			hasSpecial = true
-
 		}
 	}
 

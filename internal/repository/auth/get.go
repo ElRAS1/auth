@@ -11,12 +11,11 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-// GetUsers: return all users in db
 func (r *repo) Get(ctx context.Context, req *model.GetRequest) (*model.GetResponse, error) {
 	const nm = "[RepoGet]"
 
 	query, args, err := sq.Select(id, name, email, role, createdAt, updatedAt).From(dbName).
-		Where(sq.Eq{"id": req.Id}).
+		Where(sq.Eq{id: req.Id}).
 		PlaceholderFormat(sq.Dollar).
 		Limit(1).
 		ToSql()

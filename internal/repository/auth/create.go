@@ -12,11 +12,10 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-// SaveUser in db
 func (r *repo) Create(ctx context.Context, req *model.CreateRequest) (*model.CreateResponse, error) {
 	const nm = "[RepoCreate]"
 
-	hashedPassw, err := utils.EncryptedPassw(req.Password)
+	hashedPassw, err := utils.EncryptedPassword(req.Password)
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", nm, err)
 	}

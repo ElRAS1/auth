@@ -1,11 +1,14 @@
-addr: ":50051"
+grpc_port: ":50051"
 network: "tcp"
+
+http_port: ":8081"
+http_host: "localhost"
 
 level: 0
 # LevelDebug Level = -4
 # LevelInfo  Level = 0
 # LevelWarn  Level = 4
 # LevelError Level = 8
-configlogger: "prod"
+config_logger: "prod"
 # "prod" print log in json format
 # "dev" print log in text format
