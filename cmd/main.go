@@ -55,7 +55,7 @@ func main() {
 	userApi.RegisterUserApiServer(server, api.New(service))
 
 	mux := runtime.NewServeMux()
-	if err = userApi.RegisterUserApiHandlerFromEndpoint(ctx, mux, cfg.HTTPPort, []grpc.DialOption{
+	if err = userApi.RegisterUserApiHandlerFromEndpoint(ctx, mux, cfg.GRPCPort, []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}); err != nil {
 		log.Fatalln(err)
