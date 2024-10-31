@@ -9,7 +9,6 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-// UpdateUser: update data
 func (r *repo) Update(ctx context.Context, req *model.UpdateRequest) error {
 	const nm = "[RepoUpdate]"
 

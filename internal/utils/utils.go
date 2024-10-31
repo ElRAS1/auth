@@ -6,16 +6,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// EncryptedPassw: hashing password: use bcrypt
-func EncryptedPassw(passw string) (string, error) {
-	const nm string = "[EncryptedPassw]"
+func EncryptedPassword(password string) (string, error) {
+	const nm string = "[EncryptedPassword]"
 
-	passwB, err := bcrypt.GenerateFromPassword([]byte(passw), bcrypt.MinCost)
+	passwB, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		return "", fmt.Errorf("%s %w", nm, err)
 	}
 
-	if err = bcrypt.CompareHashAndPassword(passwB, []byte(passw)); err != nil {
+	if err = bcrypt.CompareHashAndPassword(passwB, []byte(password)); err != nil {
 		return "", fmt.Errorf("%s %w", nm, err)
 	}
 

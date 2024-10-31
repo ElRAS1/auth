@@ -9,7 +9,6 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-// DeleteUser in db
 func (r *repo) Delete(ctx context.Context, req *model.DeleteRequest) error {
 	const nm = "[RepoDelete]"
 
