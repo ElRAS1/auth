@@ -28,6 +28,7 @@ PHONY: generate
 
 generate-user-api:
 	mkdir -p pkg/userApi
+	mkdir -p pkg/swagger
 	protoc --proto_path api/userApi --proto_path vendor.protogen \
 	--go_out=pkg/userApi --go_opt=paths=source_relative \
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
@@ -35,7 +36,10 @@ generate-user-api:
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
 	--grpc-gateway_out=pkg/userApi --grpc-gateway_opt=paths=source_relative \
 	--plugin=protoc-gen-grpc-gateway=bin/protoc-gen-grpc-gateway \
+	--openapiv2_out=allow_merge=true,merge_file_name=api:pkg/swagger \
+	--plugin=protoc-gen-openapiv2=bin/protoc-gen-openapiv2 \
 	api/userApi/userApi.proto
+
 PHONY: generate-user-api
 
 vendor-proto:

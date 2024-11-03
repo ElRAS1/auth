@@ -30,9 +30,13 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserApiClient interface {
+	// Создание пользователя
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	// Получение пользователя по id
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// Обновление пользователя
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Удаление пользователя по id
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -88,9 +92,13 @@ func (c *userApiClient) Delete(ctx context.Context, in *DeleteRequest, opts ...g
 // All implementations must embed UnimplementedUserApiServer
 // for forward compatibility.
 type UserApiServer interface {
+	// Создание пользователя
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	// Получение пользователя по id
 	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// Обновление пользователя
 	Update(context.Context, *UpdateRequest) (*emptypb.Empty, error)
+	// Удаление пользователя по id
 	Delete(context.Context, *DeleteRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedUserApiServer()
 }

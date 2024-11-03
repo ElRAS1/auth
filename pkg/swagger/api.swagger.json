@@ -1,0 +1,276 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Auth API",
+    "description": "Authorization service",
+    "version": "1.0",
+    "contact": {
+      "name": "Elmir Rasulov",
+      "email": "elmir.rasulov.2002@mail.ru"
+    }
+  },
+  "tags": [
+    {
+      "name": "UserApi"
+    }
+  ],
+  "host": "localhost:8081",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/create": {
+      "post": {
+        "summary": "Создание пользователя",
+        "operationId": "UserApi_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/userApiCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userApiCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserApi"
+        ]
+      }
+    },
+    "/v1/delete": {
+      "get": {
+        "summary": "Удаление пользователя по id",
+        "operationId": "UserApi_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "UserApi"
+        ]
+      }
+    },
+    "/v1/get": {
+      "get": {
+        "summary": "Получение пользователя по id",
+        "operationId": "UserApi_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/userApiGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "UserApi"
+        ]
+      }
+    },
+    "/v1/update": {
+      "post": {
+        "summary": "Обновление пользователя",
+        "operationId": "UserApi_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userApiUpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserApi"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "userApiCreateRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "имя"
+        },
+        "email": {
+          "type": "string",
+          "title": "почта"
+        },
+        "password": {
+          "type": "string",
+          "title": "пароль"
+        },
+        "passwordConfirm": {
+          "type": "string",
+          "title": "подтверждающий пароль"
+        },
+        "role": {
+          "$ref": "#/definitions/userApirole"
+        }
+      }
+    },
+    "userApiCreateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "userApiGetResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "title": "имя"
+        },
+        "email": {
+          "type": "string",
+          "title": "почта"
+        },
+        "role": {
+          "$ref": "#/definitions/userApirole"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "userApiUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "userApirole": {
+      "type": "string",
+      "enum": [
+        "user",
+        "admin"
+      ],
+      "default": "user"
+    }
+  }
+}
