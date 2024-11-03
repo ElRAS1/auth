@@ -30,8 +30,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := context.Background()
 
 	logger := lgr.New(cfg.LogLevel, cfg.ConfigLog)
 	slog.SetDefault(logger)
@@ -42,7 +41,6 @@ func main() {
 	}
 
 	dbClient, err := config.InitializeDatabaseClient(ctx)
-
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -54,13 +52,6 @@ func main() {
 	reflection.Register(server)
 	userApi.RegisterUserApiServer(server, api.New(service))
 
-	mux := runtime.NewServeMux()
-	if err = userApi.RegisterUserApiHandlerFromEndpoint(ctx, mux, cfg.GRPCPort, []grpc.DialOption{
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	}); err != nil {
-		log.Fatalln(err)
-	}
-
 	go func() {
 		if err = server.Serve(listener); err != nil {
 			log.Fatalln(fmt.Sprintf("failed to grpc serve: %v", err))
@@ -68,14 +59,61 @@ func main() {
 	}()
 	logger.Info(fmt.Sprintf("grpc server is running on the port %v", cfg.GRPCPort))
 
+	httpServer := InitHTTP(ctx, cfg.GRPCPort, cfg.HTTPPort)
 	go func() {
-		if err = http.ListenAndServe(cfg.HTTPPort, mux); err != nil {
+		if err = httpServer.ListenAndServe(); err != nil {
 			log.Fatalln(fmt.Sprintf("failed to http serve: %v", err))
 		}
 	}()
 	logger.Info(fmt.Sprintf("http server is running on the port %v", cfg.HTTPPort))
 
+	go func() {
+		if err = http.ListenAndServe(cfg.HTTPSwagger, InitSwagger()); err != nil {
+			log.Fatalln(fmt.Sprintf("failed to swagger serve: %v", err))
+		}
+	}()
+	logger.Info(fmt.Sprintf("swagger ui is running on the url %v", "http://localhost:8090"))
+
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	<-sig
+}
+
+func InitHTTP(ctx context.Context, GRPCport, HTTPport string) *http.Server {
+	mux := runtime.NewServeMux()
+	if err := userApi.RegisterUserApiHandlerFromEndpoint(ctx, mux, GRPCport, []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	}); err != nil {
+		log.Fatalln(err)
+	}
+
+	return &http.Server{
+		Handler: CorsMiddleware(mux),
+		Addr:    HTTPport,
+	}
+}
+
+func InitSwagger() *http.ServeMux {
+	swaggerHTTP := http.NewServeMux()
+	swaggerHTTP.HandleFunc("/api.swagger.json", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "pkg/swagger/api.swagger.json")
+	})
+
+	swaggerHTTP.Handle("/", http.FileServer(http.Dir("./swagger-ui/")))
+
+	return swaggerHTTP
+}
+
+func CorsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, UPDATE, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == http.MethodOptions {
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }

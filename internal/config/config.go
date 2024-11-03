@@ -5,12 +5,13 @@ import (
 )
 
 type Config struct {
-	GRPCPort  string `yaml:"grpc_port" env-default:"50051"`
-	HTTPPort  string `yaml:"http_port" env-default:"8081"`
-	HTTPHost  string `yaml:"http_host" env-default:"localhost"`
-	Network   string `yaml:"network" env-default:"tcp"`
-	LogLevel  int    `yaml:"level" env-default:"0"`
-	ConfigLog string `yaml:"config_logger" env-default:"prod"`
+	GRPCPort    string `yaml:"grpc_port" env-default:"50051"`
+	HTTPPort    string `yaml:"http_port" env-default:"8081"`
+	HTTPSwagger string `yaml:"http_swagger" env-default:":8090"`
+	HTTPHost    string `yaml:"http_host" env-default:"localhost"`
+	Network     string `yaml:"network" env-default:"tcp"`
+	LogLevel    int    `yaml:"level" env-default:"0"`
+	ConfigLog   string `yaml:"config_logger" env-default:"prod"`
 }
 
 const cfgPath string = "config.yaml"
