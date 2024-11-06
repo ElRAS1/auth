@@ -8,25 +8,24 @@ import (
 	"github.com/ELRAS1/auth/internal/model"
 	"github.com/ELRAS1/auth/internal/repository/auth/converter"
 	modulRepo "github.com/ELRAS1/auth/internal/repository/auth/model"
-	"github.com/ELRAS1/auth/internal/utils"
+	"github.com/ELRAS1/auth/internal/repository/auth/utils"
 	sq "github.com/Masterminds/squirrel"
 )
 
 func (r *repo) Create(ctx context.Context, req *model.CreateRequest) (*model.CreateResponse, error) {
 	const nm = "[RepoCreate]"
 
-	hashedPassw, err := utils.EncryptedPassword(req.Password)
+	hashedPassword, err := utils.EncryptedPassword(req.Password)
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", nm, err)
 	}
 
 	query, args, err := sq.Insert(dbName).
 		Columns(name, email, password, role, createdAt).
-		Values(req.Name, req.Email, hashedPassw, req.Role, time.Now()).
+		Values(req.Name, req.Email, hashedPassword, req.Role, time.Now()).
 		Suffix(returningID).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
-
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", nm, err)
 	}

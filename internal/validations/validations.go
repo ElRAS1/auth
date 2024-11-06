@@ -41,11 +41,9 @@ func CheckCreate(req *model.CreateRequest) error {
 	}
 
 	return nil
-
 }
 
 func CheckUpdate(req *model.UpdateRequest) error {
-
 	if req.Name == "" && req.Email == "" {
 		return fmt.Errorf("%s", errEmptyFields)
 	}
