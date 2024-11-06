@@ -1,12 +1,8 @@
 include .env
 LOCAL_BIN:=$(CURDIR)/bin
 
-install-golangci-lint:
-	GOBIN=$(LOCAL_BIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.53.3
-PHONY: install-golangci-lint
-
 lint:
-	GOBIN=$(LOCAL_BIN) golangci-lint run ./... --config .golangci.pipeline.yaml
+	golangci-lint run ./... --config .golangci.pipeline.yaml --fix
 PHONY: lint
 
 install-deps:
@@ -70,6 +66,14 @@ run: format
 	go run cmd/main.go
 PHONY: run
 
+start-app: format
+	docker-compose up --build -d
+PHONY: start-app
+
+stop-app:
+	docker-compose down
+PHONY: stop-app
+
 format:
-	@go fmt ./...
+	go fmt ./...
 PHONY: format

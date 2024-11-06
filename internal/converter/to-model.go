@@ -18,8 +18,8 @@ func ServiceCreateToModel(req *userApi.CreateRequest) *model.CreateRequest {
 func ServiceUpdateToModel(req *userApi.UpdateRequest) *model.UpdateRequest {
 	return &model.UpdateRequest{
 		Id:    req.GetId(),
-		Name:  req.GetName().Value,
-		Email: req.GetEmail().Value,
+		Name:  req.GetName().GetValue(),
+		Email: req.GetEmail().GetValue(),
 	}
 }
 

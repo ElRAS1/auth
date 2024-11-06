@@ -37,7 +37,6 @@ func CheckPassword(password string) error {
 	)
 
 	for _, sym := range password {
-
 		if hasUpper && hasLower && hasNumber && hasSpecial {
 			return nil
 		}
