@@ -6,7 +6,6 @@ import (
 
 	"github.com/ELRAS1/auth/internal/model"
 	"github.com/ELRAS1/auth/internal/repository"
-	"github.com/ELRAS1/auth/internal/validations"
 )
 
 type service struct {
@@ -18,10 +17,6 @@ func New(authRepo repository.AuthRepository) *service {
 }
 
 func (s *service) Create(ctx context.Context, req *model.CreateRequest) (*model.CreateResponse, error) {
-	if err := validations.CheckCreate(req); err != nil {
-		return nil, fmt.Errorf("create error: %w", err)
-	}
-
 	resp, err := s.authRepository.Create(ctx, req)
 	if err != nil {
 		return nil, fmt.Errorf("create error: %w", err)
@@ -31,10 +26,6 @@ func (s *service) Create(ctx context.Context, req *model.CreateRequest) (*model.
 }
 
 func (s *service) Update(ctx context.Context, req *model.UpdateRequest) error {
-	if err := validations.CheckUpdate(req); err != nil {
-		return fmt.Errorf("update error: %w", err)
-	}
-
 	err := s.authRepository.Update(ctx, req)
 	if err != nil {
 		return fmt.Errorf("update error: %w", err)

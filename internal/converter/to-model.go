@@ -5,7 +5,7 @@ import (
 	"github.com/ELRAS1/auth/pkg/userApi"
 )
 
-func ServiceCreateToModel(req *userApi.CreateRequest) *model.CreateRequest {
+func CreateToModel(req *userApi.CreateRequest) *model.CreateRequest {
 	return &model.CreateRequest{
 		Name:            req.GetName(),
 		Email:           req.GetEmail(),
@@ -15,7 +15,7 @@ func ServiceCreateToModel(req *userApi.CreateRequest) *model.CreateRequest {
 	}
 }
 
-func ServiceUpdateToModel(req *userApi.UpdateRequest) *model.UpdateRequest {
+func UpdateToModel(req *userApi.UpdateRequest) *model.UpdateRequest {
 	return &model.UpdateRequest{
 		Id:    req.GetId(),
 		Name:  req.GetName().GetValue(),
@@ -23,13 +23,13 @@ func ServiceUpdateToModel(req *userApi.UpdateRequest) *model.UpdateRequest {
 	}
 }
 
-func ServiceDeleteToModel(req *userApi.DeleteRequest) *model.DeleteRequest {
+func DeleteToModel(req *userApi.DeleteRequest) *model.DeleteRequest {
 	return &model.DeleteRequest{
 		Id: req.GetId(),
 	}
 }
 
-func ServiceGetToModel(req *userApi.GetRequest) *model.GetRequest {
+func GetToModel(req *userApi.GetRequest) *model.GetRequest {
 	return &model.GetRequest{
 		Id: req.GetId(),
 	}

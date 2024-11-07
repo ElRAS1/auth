@@ -2,9 +2,11 @@ package api
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/ELRAS1/auth/internal/converter"
 	"github.com/ELRAS1/auth/internal/service"
+	"github.com/ELRAS1/auth/internal/validations"
 	"github.com/ELRAS1/auth/pkg/userApi"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -22,7 +24,11 @@ func New(srv service.AuthService) *AuthApi {
 }
 
 func (a *AuthApi) Create(ctx context.Context, req *userApi.CreateRequest) (*userApi.CreateResponse, error) {
-	resp, err := a.serv.Create(ctx, converter.ServiceCreateToModel(req))
+	if err := validations.CheckCreate(converter.CreateToModel(req)); err != nil {
+		return nil, fmt.Errorf("create error: %w", err)
+	}
+
+	resp, err := a.serv.Create(ctx, converter.CreateToModel(req))
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +37,11 @@ func (a *AuthApi) Create(ctx context.Context, req *userApi.CreateRequest) (*user
 }
 
 func (a *AuthApi) Update(ctx context.Context, req *userApi.UpdateRequest) (*emptypb.Empty, error) {
-	err := a.serv.Update(ctx, converter.ServiceUpdateToModel(req))
+	if err := validations.CheckUpdate(converter.UpdateToModel(req)); err != nil {
+		return &emptypb.Empty{}, fmt.Errorf("update error: %w", err)
+	}
+
+	err := a.serv.Update(ctx, converter.UpdateToModel(req))
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +50,7 @@ func (a *AuthApi) Update(ctx context.Context, req *userApi.UpdateRequest) (*empt
 }
 
 func (a *AuthApi) Delete(ctx context.Context, req *userApi.DeleteRequest) (*emptypb.Empty, error) {
-	err := a.serv.Delete(ctx, converter.ServiceDeleteToModel(req))
+	err := a.serv.Delete(ctx, converter.DeleteToModel(req))
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +59,7 @@ func (a *AuthApi) Delete(ctx context.Context, req *userApi.DeleteRequest) (*empt
 }
 
 func (a *AuthApi) Get(ctx context.Context, req *userApi.GetRequest) (*userApi.GetResponse, error) {
-	resp, err := a.serv.Get(ctx, converter.ServiceGetToModel(req))
+	resp, err := a.serv.Get(ctx, converter.GetToModel(req))
 	if err != nil {
 		return nil, err
 	}
