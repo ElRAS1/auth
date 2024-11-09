@@ -50,7 +50,7 @@ func main() {
 	userApi.RegisterUserApiServer(server, api.New(service))
 
 	go func() {
-		logger.Info(fmt.Sprintf("grpc server is running on the port %v", cfg.GRPCPort))
+		logger.Info(fmt.Sprintf("grpc server is running on: %v", net.JoinHostPort(cfg.Host, cfg.GRPCPort)))
 		if err = server.Serve(listener); err != nil {
 			log.Fatalln(fmt.Sprintf("failed to grpc serve: %v", err))
 		}
@@ -58,7 +58,7 @@ func main() {
 
 	httpServer := config.InitHTTP(ctx, cfg.GRPCPort, cfg.HTTPPort)
 	go func() {
-		logger.Info(fmt.Sprintf("http server is running on the port %v", cfg.HTTPPort))
+		logger.Info(fmt.Sprintf("http server is running on: %v", net.JoinHostPort(cfg.Host, cfg.HTTPPort)))
 		if err = httpServer.ListenAndServe(); err != nil {
 			log.Fatalln(fmt.Sprintf("failed to http serve: %v", err))
 		}
@@ -66,8 +66,8 @@ func main() {
 
 	httpSwagger := config.InitSwagger()
 	go func() {
-		logger.Info(fmt.Sprintf("swagger ui is running on the url %v", "http://localhost:8090"))
-		if err = http.ListenAndServe(cfg.HTTPSwagger, httpSwagger); err != nil {
+		logger.Info(fmt.Sprintf("swagger ui is running on: %v", net.JoinHostPort(cfg.Host, cfg.SwaggerPort)))
+		if err = http.ListenAndServe(cfg.SwaggerPort, httpSwagger); err != nil {
 			log.Fatalln(fmt.Sprintf("failed to swagger serve: %v", err))
 		}
 	}()

@@ -26,6 +26,7 @@ func (r *repo) Create(ctx context.Context, req *model.CreateRequest) (*model.Cre
 		Suffix(returningID).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
+		
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", nm, err)
 	}

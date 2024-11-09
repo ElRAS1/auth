@@ -19,6 +19,7 @@ func (r *repo) Get(ctx context.Context, req *model.GetRequest) (*model.GetRespon
 		PlaceholderFormat(sq.Dollar).
 		Limit(1).
 		ToSql()
+		
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", nm, err)
 	}

@@ -16,6 +16,7 @@ func (r *repo) Delete(ctx context.Context, req *model.DeleteRequest) error {
 		Where(sq.Eq{id: req.Id}).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
+		
 	if err != nil {
 		return fmt.Errorf("%s %w", nm, err)
 	}

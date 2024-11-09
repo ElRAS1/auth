@@ -2,9 +2,9 @@ grpc_port: ":50051"
 network: "tcp"
 
 http_port: ":8081"
-http_host: "localhost"
+host: "localhost"
 
-http_swagger: ":8090"
+swagger_port: ":8090"
 
 level: 0
 # LevelDebug Level = -4
