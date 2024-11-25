@@ -3,8 +3,8 @@ package converter
 import (
 	"database/sql"
 
-	"github.com/ELRAS1/auth/internal/model"
-	modulRepo "github.com/ELRAS1/auth/internal/repository/auth/model"
+	"github.com/ELRAS1/auth/internal/models/user/model"
+	modulRepo "github.com/ELRAS1/auth/internal/repository/user/model"
 )
 
 func RepoGetToModel(resp *modulRepo.GetResponse) *model.GetResponse {

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package userApi;
 
-option go_package = "github.com/ELRAS1/auth/api/userApi;userApi";
+option go_package = "github.com/ELRAS1/user/api/user;user";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
@@ -12,7 +12,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "Auth API";
+    title: "user API";
     version: "1.0";
     description: "Authorization service";
     contact: {

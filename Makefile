@@ -2,24 +2,26 @@ include .env
 LOCAL_BIN:=$(CURDIR)/bin
 
 lint:
-	golangci-lint run ./... --config .golangci.pipeline.yaml --fix
+	golangci-lint run ./... --config .golangci.yaml
 PHONY: lint
+
+lint-fix:
+	golangci-lint run ./... --config .golangci.yaml --fix
+PHONY: lint-fix
 
 install-deps:
 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	GOBIN=$(LOCAL_BIN) go install -mod=mod google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
-  	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 PHONY: install-deps
-
 
 get-deps:
 	go get -u google.golang.org/protobuf/cmd/protoc-gen-go
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 PHONY: get-deps
 
-generate:
-	make generate-user-api
+generate: generate-user-api  generate-auth-api generate-access-api
 PHONY: generate
 
 generate-user-api:
@@ -37,6 +39,28 @@ generate-user-api:
 	api/userApi/userApi.proto
 
 PHONY: generate-user-api
+
+generate-auth-api:
+	mkdir -p pkg/auth
+	protoc --proto_path api/auth \
+	--go_out=pkg/auth --go_opt=paths=source_relative \
+	--plugin=protoc-gen-go=bin/protoc-gen-go \
+	--go-grpc_out=pkg/auth --go-grpc_opt=paths=source_relative \
+	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
+	api/auth/auth.proto
+
+PHONY: generate-auth-api
+
+generate-access-api:
+	mkdir -p pkg/access
+	protoc --proto_path api/access \
+	--go_out=pkg/access --go_opt=paths=source_relative \
+	--plugin=protoc-gen-go=bin/protoc-gen-go \
+	--go-grpc_out=pkg/access --go-grpc_opt=paths=source_relative \
+	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
+	api/access/access.proto
+
+PHONY: generate-access-api
 
 vendor-proto:
 		if [ ! -d vendor.protogen/google ]; then \

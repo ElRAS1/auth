@@ -1,13 +1,13 @@
-package auth
+package user
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/ELRAS1/auth/internal/model"
-	"github.com/ELRAS1/auth/internal/repository/auth/converter"
-	modulRepo "github.com/ELRAS1/auth/internal/repository/auth/model"
+	"github.com/ELRAS1/auth/internal/models/user/model"
+	"github.com/ELRAS1/auth/internal/repository/user/converter"
+	modulRepo "github.com/ELRAS1/auth/internal/repository/user/model"
 	sq "github.com/Masterminds/squirrel"
 )
 
@@ -19,7 +19,7 @@ func (r *repo) Get(ctx context.Context, req *model.GetRequest) (*model.GetRespon
 		PlaceholderFormat(sq.Dollar).
 		Limit(1).
 		ToSql()
-		
+
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", nm, err)
 	}

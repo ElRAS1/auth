@@ -1,0 +1,163 @@
+run:
+  concurrency: 8
+  timeout: 3m
+
+issues:
+  exclude-dirs:
+    - deploy
+    - docker
+    - bin
+    - docs
+    - web
+    - build
+    - vendor
+    - vendor.protogen
+    - swagger-ui
+    - pkg
+
+output:
+  formats:
+    - format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+
+linters-settings:
+  errcheck:
+    # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
+    # Such cases aren't reported by default.
+    check-type-assertions: true
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`.
+    # Such cases aren't reported by default.
+    check-blank: true
+  govet:
+    enable-all: true
+    settings:
+      shadow:
+        # Whether to be strict about shadowing; can be noisy.
+        strict: true
+  cyclop:
+    # The maximal code complexity to report.
+    # Default: 10
+    max-complexity: 20
+    # Should ignore tests.
+    skip-tests: true
+  funlen:
+    # Checks the number of lines in a function.
+    # If lower than 0, disable the check.
+    lines: 100
+    # Checks the number of statements in a function.
+    # If lower than 0, disable the check.
+    statements: 60
+    # Ignore comments when counting lines.
+    ignore-comments: true
+  gochecksumtype:
+    # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
+    default-signifies-exhaustive: false
+  gocognit:
+    # Minimal code complexity to report.
+    # Default: 30 (but we recommend 10-20)
+    min-complexity: 30
+  gocritic:
+    enable-all: true
+    disabled-checks:
+      - unnamedResult
+  gocyclo:
+    # Minimal code complexity to report.
+    min-complexity: 20
+  iface:
+    enable:
+      - identical # Identifies interfaces in the same package that have identical method sets.
+      - unused # Identifies interfaces that are not used anywhere in the same package where the interface is defined.
+      - opaque # Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.
+  nakedret:
+    # Make an issue if func has more lines of code than this setting, and it has naked returns.
+    max-func-lines: 0
+  nestif:
+    # Minimal complexity of if statements to report.
+    min-complexity: 4
+  nonamedreturns:
+    # Report named error if it is assigned inside defer.
+    report-error-in-defer: true
+  perfsprint:
+    # Optimizes even if it requires an int or uint type cast.
+    int-conversion: false
+    # Optimizes into `err.Error()` even if it is only equivalent for non-nil errors.
+    err-error: true
+    # Optimizes `fmt.Errorf`.
+    errorf: false
+    # Optimizes `fmt.Sprintf` with only one argument.
+    sprintf1: false
+    # Optimizes into strings concatenation.
+    strconcat: false
+  protogetter:
+    # Skip files matching the specified glob pattern from the checking.
+    skip-files:
+      - "*.pb.go"
+      - "*/vendor/*"
+  reassign:
+    # Patterns for global variable names that are checked for reassignment.
+    patterns:
+      - ".*"
+
+linters:
+  disable-all: true
+  enable:
+    - errcheck # checking for unchecked errors, these unchecked errors can be critical bugs in some cases
+    - gosimple # specializes in simplifying a code
+    - govet # reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
+    - ineffassign # detects when assignments to existing variables are not used
+    - staticcheck # is a go vet on steroids, applying a ton of static analysis checks
+    - typecheck # like the front-end of a Go compiler, parses and type-checks Go code
+    - unused # checks for unused constants, variables, functions and types
+    - asasalint # checks for pass []any as any in variadic func(...any)
+    - asciicheck # checks that your code does not contain non-ASCII identifiers
+    - bidichk # checks for dangerous unicode character sequences
+    - bodyclose  # checks whether HTTP response body is closed successfully
+    - canonicalheader # checks whether net/http.Header uses canonical header
+    - copyloopvar # detects places where loop variables are copied (Go 1.22+)
+    - cyclop # checks function and package cyclomatic complexity
+    - dupl # tool for code clone detection
+    - durationcheck # checks for two durations multiplied together
+    - errname # checks that sentinel errors are prefixed with the Err and error types are suffixed with the Error
+    - exhaustive # checks exhaustiveness of enum switch statements
+    - fatcontext # detects nested contexts in loops
+    - funlen # tool for detection of long functions
+    - gocheckcompilerdirectives # validates go compiler directive comments (//go:)
+    - gochecknoglobals # checks that no global variables exist
+    - gochecknoinits # checks that no init functions are present in Go code
+    - gocognit # computes and checks the cognitive complexity of functions
+    - goconst # finds repeated strings that could be replaced by a constant
+    - gocritic # provides diagnostics that check for bugs, performance and style issues
+    - gocyclo # computes and checks the cyclomatic complexity of functions
+    - goimports # in addition to fixing imports, goimports also formats your code in the same style as gofmt
+    - gomoddirectives # manages the use of 'replace', 'retract', and 'excludes' directives in go.mod
+    - goprintffuncname # checks that printf-like functions are named with f at the end
+    - iface # checks the incorrect use of interfaces, helping developers avoid interface pollution
+    - mirror # reports wrong mirror patterns of bytes/strings usage
+    - nakedret # finds naked returns in functions greater than a specified function length
+    - nestif # reports deeply nested if statements
+    - nilerr # finds the code that returns nil even if it checks that the error is not nil
+    - nilnil # checks that there is no simultaneous return of nil error and an invalid value
+    - nonamedreturns # reports all named returns
+    - nosprintfhostport # checks for misuse of Sprintf to construct a host with port in a URL
+    - perfsprint # checks that fmt.Sprintf can be replaced with a faster alternative
+    - predeclared # finds code that shadows one of Go's predeclared identifiers
+    - promlinter # checks Prometheus metrics naming via promlint
+    - protogetter # reports direct reads from proto message fields when getters should be used
+    - recvcheck # checks for receiver type consistency
+    - revive # fast, configurable, extensible, flexible, and beautiful linter for Go, drop-in replacement of golint
+    - rowserrcheck # checks whether Err of rows is checked successfully
+    - sqlclosecheck # checks that sql.Rows and sql.Stmt are closed
+    - stylecheck # is a replacement for golint
+    - testableexamples # checks if examples are testable (have an expected output)
+    - tparallel # detects inappropriate usage of t.Parallel() method in your Go test codes
+    - unconvert # removes unnecessary type conversions
+    - unparam # reports unused function parameters
+    - usestdlibvars # detects the possibility to use variables/constants from the Go standard library
+    - wastedassign # finds wasted assignment statements
+    - whitespace # detects leading and trailing whitespace
+    - wrapcheck # checks that errors returned from external packages are wrapped
+    - prealloc # finds slice declarations that could potentially be pre-allocated.
+    - ireturn # accept interfaces, return concrete types
+    - interfacebloat # checks the number of methods inside an interface

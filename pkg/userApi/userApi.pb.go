@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.35.1
 // 	protoc        v3.21.12
-// source: userApi.proto
+// source: user.proto
 
 package userApi
 
@@ -84,7 +84,7 @@ type CreateRequest struct {
 	Password string `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	// подтверждающий пароль
 	PasswordConfirm string `protobuf:"bytes,4,opt,name=password_confirm,json=passwordConfirm,proto3" json:"password_confirm,omitempty"`
-	Role            Role   `protobuf:"varint,5,opt,name=role,proto3,enum=userApi.Role" json:"role,omitempty"`
+	Role            Role   `protobuf:"varint,5,opt,name=role,proto3,enum=user.Role" json:"role,omitempty"`
 }
 
 func (x *CreateRequest) Reset() {
@@ -252,7 +252,7 @@ type GetResponse struct {
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// почта
 	Email     string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Role      Role                   `protobuf:"varint,4,opt,name=role,proto3,enum=userApi.Role" json:"role,omitempty"`
+	Role      Role                   `protobuf:"varint,4,opt,name=role,proto3,enum=user.Role" json:"role,omitempty"`
 	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
@@ -511,7 +511,7 @@ var file_userApi_proto_rawDesc = []byte{
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22,
 	0x12, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0c, 0x12, 0x0a, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c,
-	0x65, 0x74, 0x65, 0x42, 0xbd, 0x01, 0x92, 0x41, 0x8d, 0x01, 0x12, 0x53, 0x0a, 0x08, 0x41, 0x75,
+	0x65, 0x74, 0x65, 0x42, 0xbd, 0x01, 0x92, 0x41, 0x8d, 0x01, 0x12, 0x53, 0x0a, 0x08, 0x61, 0x75,
 	0x74, 0x68, 0x20, 0x41, 0x50, 0x49, 0x12, 0x15, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x20, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x2b, 0x0a,
 	0x0d, 0x45, 0x6c, 0x6d, 0x69, 0x72, 0x20, 0x52, 0x61, 0x73, 0x75, 0x6c, 0x6f, 0x76, 0x1a, 0x1a,
@@ -541,32 +541,32 @@ func file_userApi_proto_rawDescGZIP() []byte {
 var file_userApi_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_userApi_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_userApi_proto_goTypes = []any{
-	(Role)(0),                      // 0: userApi.role
-	(*CreateRequest)(nil),          // 1: userApi.CreateRequest
-	(*CreateResponse)(nil),         // 2: userApi.CreateResponse
-	(*GetRequest)(nil),             // 3: userApi.GetRequest
-	(*GetResponse)(nil),            // 4: userApi.GetResponse
-	(*UpdateRequest)(nil),          // 5: userApi.UpdateRequest
-	(*DeleteRequest)(nil),          // 6: userApi.DeleteRequest
+	(Role)(0),                      // 0: user.role
+	(*CreateRequest)(nil),          // 1: user.CreateRequest
+	(*CreateResponse)(nil),         // 2: user.CreateResponse
+	(*GetRequest)(nil),             // 3: user.GetRequest
+	(*GetResponse)(nil),            // 4: user.GetResponse
+	(*UpdateRequest)(nil),          // 5: user.UpdateRequest
+	(*DeleteRequest)(nil),          // 6: user.DeleteRequest
 	(*timestamppb.Timestamp)(nil),  // 7: google.protobuf.Timestamp
 	(*wrapperspb.StringValue)(nil), // 8: google.protobuf.StringValue
 	(*emptypb.Empty)(nil),          // 9: google.protobuf.Empty
 }
 var file_userApi_proto_depIdxs = []int32{
-	0,  // 0: userApi.CreateRequest.role:type_name -> userApi.role
-	0,  // 1: userApi.GetResponse.role:type_name -> userApi.role
-	7,  // 2: userApi.GetResponse.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 3: userApi.GetResponse.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 4: userApi.UpdateRequest.name:type_name -> google.protobuf.StringValue
-	8,  // 5: userApi.UpdateRequest.email:type_name -> google.protobuf.StringValue
-	1,  // 6: userApi.UserApi.Create:input_type -> userApi.CreateRequest
-	3,  // 7: userApi.UserApi.Get:input_type -> userApi.GetRequest
-	5,  // 8: userApi.UserApi.Update:input_type -> userApi.UpdateRequest
-	6,  // 9: userApi.UserApi.Delete:input_type -> userApi.DeleteRequest
-	2,  // 10: userApi.UserApi.Create:output_type -> userApi.CreateResponse
-	4,  // 11: userApi.UserApi.Get:output_type -> userApi.GetResponse
-	9,  // 12: userApi.UserApi.Update:output_type -> google.protobuf.Empty
-	9,  // 13: userApi.UserApi.Delete:output_type -> google.protobuf.Empty
+	0,  // 0: user.CreateRequest.role:type_name -> user.role
+	0,  // 1: user.GetResponse.role:type_name -> user.role
+	7,  // 2: user.GetResponse.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 3: user.GetResponse.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 4: user.UpdateRequest.name:type_name -> google.protobuf.StringValue
+	8,  // 5: user.UpdateRequest.email:type_name -> google.protobuf.StringValue
+	1,  // 6: user.UserApi.Create:input_type -> user.CreateRequest
+	3,  // 7: user.UserApi.Get:input_type -> user.GetRequest
+	5,  // 8: user.UserApi.Update:input_type -> user.UpdateRequest
+	6,  // 9: user.UserApi.Delete:input_type -> user.DeleteRequest
+	2,  // 10: user.UserApi.Create:output_type -> user.CreateResponse
+	4,  // 11: user.UserApi.Get:output_type -> user.GetResponse
+	9,  // 12: user.UserApi.Update:output_type -> google.protobuf.Empty
+	9,  // 13: user.UserApi.Delete:output_type -> google.protobuf.Empty
 	10, // [10:14] is the sub-list for method output_type
 	6,  // [6:10] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name

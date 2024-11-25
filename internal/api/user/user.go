@@ -1,29 +1,29 @@
-package api
+package user
 
 import (
 	"context"
 	"fmt"
+	"github.com/ELRAS1/auth/internal/converters/user/converter"
 
-	"github.com/ELRAS1/auth/internal/converter"
 	"github.com/ELRAS1/auth/internal/service"
 	"github.com/ELRAS1/auth/internal/validations"
 	"github.com/ELRAS1/auth/pkg/userApi"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-type AuthApi struct {
+type Api struct {
 	*userApi.UnimplementedUserApiServer
-	serv service.AuthService
+	serv service.User
 }
 
-func New(srv service.AuthService) *AuthApi {
-	return &AuthApi{
+func New(srv service.User) *Api {
+	return &Api{
 		serv:                       srv,
 		UnimplementedUserApiServer: &userApi.UnimplementedUserApiServer{},
 	}
 }
 
-func (a *AuthApi) Create(ctx context.Context, req *userApi.CreateRequest) (*userApi.CreateResponse, error) {
+func (a *Api) Create(ctx context.Context, req *userApi.CreateRequest) (*userApi.CreateResponse, error) {
 	if err := validations.CheckCreate(converter.CreateToModel(req)); err != nil {
 		return nil, fmt.Errorf("create error: %w", err)
 	}
@@ -36,7 +36,7 @@ func (a *AuthApi) Create(ctx context.Context, req *userApi.CreateRequest) (*user
 	return converter.CreateToApi(resp), nil
 }
 
-func (a *AuthApi) Update(ctx context.Context, req *userApi.UpdateRequest) (*emptypb.Empty, error) {
+func (a *Api) Update(ctx context.Context, req *userApi.UpdateRequest) (*emptypb.Empty, error) {
 	if err := validations.CheckUpdate(converter.UpdateToModel(req)); err != nil {
 		return &emptypb.Empty{}, fmt.Errorf("update error: %w", err)
 	}
@@ -49,7 +49,7 @@ func (a *AuthApi) Update(ctx context.Context, req *userApi.UpdateRequest) (*empt
 	return &emptypb.Empty{}, nil
 }
 
-func (a *AuthApi) Delete(ctx context.Context, req *userApi.DeleteRequest) (*emptypb.Empty, error) {
+func (a *Api) Delete(ctx context.Context, req *userApi.DeleteRequest) (*emptypb.Empty, error) {
 	err := a.serv.Delete(ctx, converter.DeleteToModel(req))
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (a *AuthApi) Delete(ctx context.Context, req *userApi.DeleteRequest) (*empt
 	return &emptypb.Empty{}, nil
 }
 
-func (a *AuthApi) Get(ctx context.Context, req *userApi.GetRequest) (*userApi.GetResponse, error) {
+func (a *Api) Get(ctx context.Context, req *userApi.GetRequest) (*userApi.GetResponse, error) {
 	resp, err := a.serv.Get(ctx, converter.GetToModel(req))
 	if err != nil {
 		return nil, err

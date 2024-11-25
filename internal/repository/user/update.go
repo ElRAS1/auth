@@ -1,11 +1,11 @@
-package auth
+package user
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/ELRAS1/auth/internal/model"
+	"github.com/ELRAS1/auth/internal/models/user/model"
 	sq "github.com/Masterminds/squirrel"
 )
 

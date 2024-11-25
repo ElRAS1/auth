@@ -1,11 +1,11 @@
-package auth
+package user
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/ELRAS1/auth/internal/model"
+	"github.com/ELRAS1/auth/internal/models/user/model"
 	sq "github.com/Masterminds/squirrel"
 )
 
@@ -16,7 +16,7 @@ func (r *repo) Delete(ctx context.Context, req *model.DeleteRequest) error {
 		Where(sq.Eq{id: req.Id}).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
-		
+
 	if err != nil {
 		return fmt.Errorf("%s %w", nm, err)
 	}

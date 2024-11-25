@@ -14,9 +14,5 @@ func EncryptedPassword(password string) (string, error) {
 		return "", fmt.Errorf("%s %w", nm, err)
 	}
 
-	if err = bcrypt.CompareHashAndPassword(passwB, []byte(password)); err != nil {
-		return "", fmt.Errorf("%s %w", nm, err)
-	}
-
 	return string(passwB), nil
 }

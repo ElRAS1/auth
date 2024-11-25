@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ELRAS1/auth/internal/model"
+	"github.com/ELRAS1/auth/internal/models/user/model"
 )
 
 const (

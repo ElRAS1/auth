@@ -1,0 +1,14 @@
+syntax="proto3";
+
+package access;
+
+option go_package = "github.com/ELRAS1/user/api/access;access";
+import "google/protobuf/empty.proto";
+
+service Access {
+  rpc Check(CheckRequest) returns (google.protobuf.Empty);
+}
+
+message CheckRequest {
+  string endpoint_address = 1;
+}

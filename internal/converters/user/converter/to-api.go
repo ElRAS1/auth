@@ -1,7 +1,7 @@
 package converter
 
 import (
-	"github.com/ELRAS1/auth/internal/model"
+	"github.com/ELRAS1/auth/internal/models/user/model"
 	"github.com/ELRAS1/auth/pkg/userApi"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

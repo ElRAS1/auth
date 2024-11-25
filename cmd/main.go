@@ -11,10 +11,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ELRAS1/auth/internal/api"
+	userImpl "github.com/ELRAS1/auth/internal/api/user"
+
 	"github.com/ELRAS1/auth/internal/config"
-	repoAuth "github.com/ELRAS1/auth/internal/repository/auth"
-	serviceAuth "github.com/ELRAS1/auth/internal/service/auth"
+	userRepo "github.com/ELRAS1/auth/internal/repository/user"
+	userService "github.com/ELRAS1/auth/internal/service/user"
 	lgr "github.com/ELRAS1/auth/pkg/logger"
 	"github.com/ELRAS1/auth/pkg/userApi"
 	"google.golang.org/grpc"
@@ -42,12 +43,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	repo := repoAuth.New(dbClient)
-	service := serviceAuth.New(repo)
+	repo := userRepo.New(dbClient)
+	service := userService.New(repo)
 
 	server := grpc.NewServer()
 	reflection.Register(server)
-	userApi.RegisterUserApiServer(server, api.New(service))
+	userApi.RegisterUserApiServer(server, userImpl.New(service))
 
 	go func() {
 		logger.Info(fmt.Sprintf("grpc server is running on: %v", net.JoinHostPort(cfg.Host, cfg.GRPCPort)))
